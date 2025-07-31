@@ -1,5 +1,5 @@
 
-name: .github/workflows/android_build_from_zip.yml
+name: android_build_from_zip.yml
 on:
   workflow_dispatch:
 jobs:
