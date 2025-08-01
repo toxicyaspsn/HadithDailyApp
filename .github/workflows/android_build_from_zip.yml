@@ -8,27 +8,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Ensure unzip exists
-        run: sudo apt-get update && sudo apt-get install -y unzip
+      - name: Unzip Project
+        run: unzip -q HadithDaily_Source.zip -d src
 
-      - name: Unzip source
-        run: |
-          unzip -q HadithDaily_Source.zip -d src
-          ls -la src
-
-      - name: Set up JDK 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Installe Gradle 8.4 (compatible avec AGP 8.2.x)
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          gradle-version: 8.4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
-      # Génère le wrapper avec
+      - name: Build APK
+        working-directory: src
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: HadithDailyApp-APK
+          path: src/app/build/outputs/apk/debug/*.apk
